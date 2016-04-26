@@ -1,0 +1,17 @@
+{
+  "name": "accessibility",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Adrian Asagba",
+  "license": "ISC",
+  "dependencies": {
+    "fs": "0.0.2",
+    "mongojs": "^2.3.0",
+    "pa11y": "^3.6.0",
+    "pa11y-webservice-client-node": "^1.1.2"
+  }
+}
