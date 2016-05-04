@@ -56,36 +56,33 @@ app.get('/client/:site/:crawlid', function (req, res) {
 
                 if(!exist) {
                     console.log("creating new task: " + task.pageUrl);
-                    /*
+
                      client.tasks.create({
-                     name: task.title,
-                     url: task.pageUrl,
-                     client: site,
-                     standard: "WCAG2AA",
-                     ignore: [],
-                     timeout: "",
-                     username: "",
-                     password: ""
+                         name: task.title,
+                         url: task.pageUrl,
+                         client: site,
+                         standard: "WCAG2AA",
+                         ignore: [],
+                         timeout: "",
+                         username: "",
+                         password: ""
                      }, function (err, task) {
-                     if (err) {
-                     return console.error(err.message);
-                     } else {
-                     console.log("task created: " + task.name);
+                         if (err) {
+                            return console.error(err.message);
+                         } else {
+                            console.log("task created: " + task.name);
 
-                     // run task
-                     client.task(task.id).run(function (err, task) {
-                     if (err) {
-
-                     return console.error(err.message);
-                     //callback(err.message);
-                     } else {
-
-                     return;
-                     }
-                     });
-                     }
+                            // run task
+                             client.task(task.id).run(function (err, task) {
+                                 if (err) {
+                                     return console.error(err.message);
+                                 } else {
+                                    return;
+                                 }
+                             });
+                         }
                      })
-                     */
+
                 } else {
                     console.log("Task " + task.pageUrl + " already exists");
 
@@ -105,7 +102,7 @@ app.get('/client/:site/:crawlid', function (req, res) {
 
 
 app.listen(process.env.PORT || 8000);
-console.log('Accessibility on port 8000');
+console.log('LFI Accessibility Service on port 8000');
 exports = module.exports = app;
 
 /*

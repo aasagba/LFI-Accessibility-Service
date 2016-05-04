@@ -32,16 +32,22 @@ getClientData = function (callback) {
 
 getClientData2 = function (id, callback) {
     var clientDocs = [];
-    var crawlid = id;
+    var crawlid = parseInt(id);
     console.log("Getting client data for crawlid: " + crawlid);
     /* Test collection */
-    var collectionName = "pageHtml_" + crawlid;
+    var collectionName = "PageHtml_" + crawlid;
     var collection = db.collection(collectionName);
     /* Test collection */
 
     collection.find({"crawlId":crawlid}, {"pageUrl":1, "title":1}).toArray(
         function (err, docs) {
-            if(err)  throw err;
+            //if(err)  throw err;
+
+            if (err) {
+                console.trace("There was a problem whilst getting data from the DB.");
+                console.error(error.stack);
+                return;
+            }
 
             //console.log(JSON.stringify(docs));
             callback(docs);
