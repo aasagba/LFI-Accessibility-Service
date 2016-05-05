@@ -10,15 +10,6 @@ var db = mongojs(dbURL);
 express = require('express');
 app = express();
 
-/*client.tasks.get({}, function (err, tasks) {
-    console.log(JSON.stringify(tasks));
-})*/
-
-app.get('/', function (req, res) {
-    res.send('Hello World!');
-});
-
-
 
 app.get('/client/:site/:crawlid', function (req, res) {
 
@@ -27,7 +18,7 @@ app.get('/client/:site/:crawlid', function (req, res) {
 
 
     // get LFI client html
-    getClientData2(crawlid, function (response) {
+    getClientData(crawlid, function (response) {
 
         createTasks(response, site,
             function (callback) {
@@ -101,37 +92,6 @@ app.get('/client/:site/:crawlid', function (req, res) {
 
 
 
-app.listen(process.env.PORT || 8000);
-console.log('LFI Accessibility Service on port 8000');
+app.listen(process.env.PORT || 5000);
+console.log('LFI Accessibility Service on port 5000');
 exports = module.exports = app;
-
-/*
- client.tasks.create({
- name: task.name,
- url: task.url,
- client: task.client,
- standard: task.standard,
- ignore: task.ignore,
- timeout: task.timeout,
- username: task.username,
- password: task.password
- }, function (err, task) {
- if (err) {
- return console.error(err.message);
- } else {
- console.log("task created: " + task.name);
-
- // run task
- client.task(task.id).run(function (err, task) {
- if (err) {
-
- return console.error(err.message);
- //callback(err.message);
- } else {
-
- return;
- }
- });
- }
- })
- */
