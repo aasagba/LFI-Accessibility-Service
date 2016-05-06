@@ -7,6 +7,7 @@ var clientDocs = [];
 var mongojs = require('mongojs');
 var dbURL = "pa11y-webservice-dev";
 var db = mongojs(dbURL);
+var async = require('async');
 express = require('express');
 app = express();
 
@@ -28,6 +29,8 @@ app.get('/client/:site/:crawlid', function (req, res) {
 
     });
 
+
+
     // loop through tasks and post each one to dashboard db
     createTasks = function (docs, site, callback) {
         console.log("creating tasks..");
@@ -35,7 +38,8 @@ app.get('/client/:site/:crawlid', function (req, res) {
         var collectionName = "tasks";
         var collection = db.collection(collectionName);
 
-        docs.forEach( function (task) {
+        //docs.forEach( function (task) {
+        async.eachSeries(docs, function (task) {
 
             var getCount = function (task, cb) {
                 collection.find({"url": task.pageUrl}).count(function (e, count) {
@@ -66,9 +70,9 @@ app.get('/client/:site/:crawlid', function (req, res) {
                             // run task
                              client.task(task.id).run(function (err, task) {
                                  if (err) {
-                                     return console.error(err.message);
+                                     console.error(err.message);
                                  } else {
-                                    return;
+                                    console.log("Task Added");
                                  }
                              });
                          }
@@ -83,14 +87,19 @@ app.get('/client/:site/:crawlid', function (req, res) {
 
         });
 
-        callback("All tasks successfully created");
+        return callback("All tasks successfully created");
 
     }
 
-    res.send("Request made to add tasks for " + site);
+
+
+    res.send("Request made to add tasks for site id: " + site);
 });
 
-
+process.on('error', function(err)
+{
+    console.log(err);
+});
 
 app.listen(process.env.PORT || 5000);
 console.log('LFI Accessibility Service on port 5000');

@@ -26,7 +26,7 @@ getClientData = function (id, callback) {
                 return;
             }
 
-            console.log(JSON.stringify(docs));
+            //console.log(JSON.stringify(docs));
             callback(docs);
         }
     );
