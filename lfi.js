@@ -8,7 +8,7 @@ db.on('error', function () {
 })
 
 
-getClientData = function (id, callback) {
+getClientData = function (id, done) {
     var clientDocs = [];
     var crawlid = parseInt(id);
     console.log("Getting client data for crawlid: " + crawlid);
@@ -23,11 +23,11 @@ getClientData = function (id, callback) {
             if (err) {
                 console.trace("There was a problem whilst getting data from the DB.");
                 console.error(error.stack);
-                return;
+                return done(null);
             }
 
             //console.log(JSON.stringify(docs));
-            callback(docs);
+            return done(docs);
         }
     );
 

@@ -21,84 +21,82 @@ app.get('/client/:site/:crawlid', function (req, res) {
     // get LFI client html
     getClientData(crawlid, function (response) {
 
-        createTasks(response, site,
-            function (callback) {
-                return;
-            }
-        );
-
-    });
-
-
-
-    // loop through tasks and post each one to dashboard db
-    createTasks = function (docs, site, callback) {
-        console.log("creating tasks..");
-
         var collectionName = "tasks";
         var collection = db.collection(collectionName);
 
-        //docs.forEach( function (task) {
-        async.eachSeries(docs, function (task) {
+        // loop tasks
+        if (response !== null && response.length > 0) {
 
-            var getCount = function (task, cb) {
-                collection.find({"url": task.pageUrl}).count(function (e, count) {
-                    return cb(e, count);
-                });
-            };
-
-            getCount(task, function (err, exist) {
-
-                if(!exist) {
-                    console.log("creating new task: " + task.pageUrl);
-
-                     client.tasks.create({
-                         name: task.title,
-                         url: task.pageUrl,
-                         client: site,
-                         standard: "WCAG2AA",
-                         ignore: [],
-                         timeout: "",
-                         username: "",
-                         password: ""
-                     }, function (err, task) {
-                         if (err) {
-                            return console.error(err.message);
-                         } else {
-                            console.log("task created: " + task.name);
-
-                            // run task
-                             client.task(task.id).run(function (err, task) {
-                                 if (err) {
-                                     console.error(err.message);
-                                 } else {
-                                    console.log("Task Added");
-                                 }
-                             });
-                         }
-                     })
-
+            async.mapLimit(response, 10, processTasks, function (error, results) {
+                if (error) {
+                    console.log("error!");
                 } else {
-                    console.log("Task " + task.pageUrl + " already exists");
 
+                    console.log('results: %j', results);
                 }
-
             });
 
-        });
+            function processTasks (task, done) {
 
-        return callback("All tasks successfully created");
+                // see if url exists
+                collection.find({"url": task.pageUrl}).count(function (e, exist) {
 
-    }
+                    if(!exist) {
+                        console.log("creating new task: " + task.pageUrl);
 
+                        // create task
+                        client.tasks.create({
+                            name: task.title,
+                            url: task.pageUrl,
+                            client: site,
+                            standard: "WCAG2AA",
+                            ignore: [],
+                            timeout: "",
+                            username: "",
+                            password: ""
+                        }, function (err, task) {
 
+                            if (err) {
+                                //console.log("error in task.create: " + task.id);
+                                return done(err);
 
+                            } else {
+                                console.log("task created: " + task.name);
+
+                                // run task
+                                client.task(task.id).run(function (err) {
+
+                                    if (err) {
+                                        //console.log("error in task.run");
+                                        return done(err);
+
+                                    } else {
+                                        //console.log("task successfully run");
+                                        return done(null, task.url + ' ran');
+                                    }
+
+                                });
+                            }
+
+                        })
+
+                    } else {
+                        //console.log("Task " + task.pageUrl + " already exists");
+                        return done(null, task.pageUrl + ' already exists');
+                    }
+
+                });
+
+            }
+
+        } else console.log("There was a problem retrieving data from the PageHtml collection");
+    });
     res.send("Request made to add tasks for site id: " + site);
 });
 
 process.on('error', function(err)
 {
-    console.log(err);
+    console.log("process.on error: " + err);
 });
 
 app.listen(process.env.PORT || 5000);
