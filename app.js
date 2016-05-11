@@ -27,7 +27,7 @@ app.get('/client/:site/:crawlid', function (req, res) {
         // loop tasks
         if (response !== null && response.length > 0) {
 
-            async.mapLimit(response, 10, processTasks, function (error, results) {
+            async.mapLimit(response, 1, processTasks, function (error, results) {
                 if (error) {
                     console.log("error!");
                 } else {
@@ -51,7 +51,7 @@ app.get('/client/:site/:crawlid', function (req, res) {
                             client: site,
                             standard: "WCAG2AA",
                             ignore: [],
-                            timeout: "",
+                            timeout: "1200000",
                             username: "",
                             password: ""
                         }, function (err, task) {
