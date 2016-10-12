@@ -18,6 +18,12 @@ getClientData = function (id, done) {
     var collection = db.collection(collectionName);
     console.log("PageHtml_" + crawlid);
 
+    // if id contains _ the strip
+    if(crawlid.indexOf('_') != -1) {
+        crawlid = parseInt(crawlid.substring(0, crawlid.indexOf('_')));
+        console.log("crawlid after substring: " + crawlid);
+    }
+
     collection.find({"crawlId":crawlid}, {"pageUrl":1, "title":1}).toArray(
         function (err, docs) {
 
