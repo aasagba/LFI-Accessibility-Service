@@ -10,7 +10,8 @@ db.on('error', function () {
 
 getClientData = function (id, done) {
     var clientDocs = [];
-    var crawlid = parseInt(id);
+    //var crawlid = parseInt(id);
+    var crawlid = id;
     console.log("Getting client data for crawlid: " + crawlid);
 
     var collectionName = "PageHtml_" + crawlid;
