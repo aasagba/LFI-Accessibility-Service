@@ -1,6 +1,6 @@
 // modules
 var mongojs = require('mongojs');
-var dbURL = "87.106.19.47/mydb";
+var dbURL = "188.166.146.12/mydb";
 var db = mongojs(dbURL);
 
 db.on('error', function () {
