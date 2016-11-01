@@ -1,6 +1,7 @@
 // modules
 var mongojs = require('mongojs');
 var dbURL = "188.166.146.12/mydb";
+//var dbURL = "localhost/mydb";
 var db = mongojs(dbURL);
 
 db.on('error', function () {
@@ -24,16 +25,19 @@ getClientData = function (id, done) {
         console.log("crawlid after substring: " + crawlid);
     }
 
-    collection.find({"crawlId":crawlid}, {"pageUrl":1, "title":1}).toArray(
+    crawlid = parseInt(id);
+
+    collection.find({"crawlId":crawlid}, {"siteId":1,"pageUrl":1, "title":1}).toArray(
         function (err, docs) {
 
             if (err) {
                 console.trace("There was a problem whilst getting data from the DB.");
-                console.error(error.stack);
+                console.error(err.stack);
+                console.log(err);
                 return done(null);
             }
 
-            //console.log(JSON.stringify(docs));
+           // console.log(JSON.stringify(docs));
             return done(docs);
         }
     );
