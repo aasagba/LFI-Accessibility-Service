@@ -31,8 +31,8 @@ app.get('/client/:site/:crawlid', function (req, res) {
         // loop tasks
         if (response !== null && response.length > 0) {
 
-            //async.mapLimit(response, 1, processTasks, function (error, results) {
-            async.map(response, processTasks, function (error, results) {
+            async.mapLimit(response, 1, processTasks, function (error, results) {
+            //async.map(response, processTasks, function (error, results) {
                 if (error) {
                     console.log("Error in processTasks!");
                 } else {
