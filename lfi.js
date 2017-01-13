@@ -1,12 +1,12 @@
 // modules
 var mongojs = require('mongojs');
-//var dbURL = "188.166.146.12/mydb";
-var dbURL = "localhost/mydb";
+var dbURL = "188.166.146.12/mydb";
+//var dbURL = "localhost/mydb";
 var db = mongojs(dbURL);
 
 db.on('error', function () {
     console.log('There was an error with the Database');
-})
+});
 
 
 getClientData = function (id, done) {
@@ -42,4 +42,4 @@ getClientData = function (id, done) {
         }
     );
 
-}
+};
