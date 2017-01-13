@@ -13,8 +13,6 @@ var db = mongojs(dbURL);
 var async = require('async');
 express = require('express');
 app = express();
-var Pool = require('phantomjs-pool').Pool;
-
 
 app.get('/client/:site/:crawlid', function (req, res) {
 
